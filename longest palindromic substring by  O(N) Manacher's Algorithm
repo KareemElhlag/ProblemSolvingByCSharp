@@ -1,0 +1,68 @@
+
+string s = "CNN";
+ManchersAlgorithm manchersAlgorithm = new ManchersAlgorithm();
+Console.WriteLine(manchersAlgorithm.Process(s));
+Console.WriteLine(manchersAlgorithm.LongestPalindrome(s));
+
+class ManchersAlgorithm
+{
+    public string Process(string s)
+    {
+        int len = s.Length;
+        if (len == 0)
+            return "$^";
+        string str = "^";
+        for (int i = 0; i < len; i++)
+        {
+            str += "#" + s[i];
+        }
+        str += "#$";
+        return str;
+    }
+
+
+    public string LongestPalindrome(string s)
+    {
+        string str = Process(s);
+        int len = str.Length;
+        int[] P = new int[len];
+        int center = 0, right = 0;
+
+        for (int i = 1; i < len - 1; i++)
+        {
+            int mirror = 2 * center - i; // = C - (i - C)
+
+            if (i < right)
+                P[i] = Math.Min(right - i, P[mirror]);
+
+            while (str[i + (1 + P[i])] == str[i - (1 + P[i])])
+                P[i]++;
+
+            if (i + P[i] > right)
+            {
+                center = i;
+                right = i + P[i];
+            }
+        }
+
+
+        int maxLen = 0;
+        int centerIndex = 0;
+        for (int i = 1; i < len - 1; i++)
+        {
+            if (P[i] > maxLen)
+            {
+                maxLen = P[i];
+                centerIndex = i;
+
+
+
+            }
+
+
+        }
+        int start = (centerIndex - 1 - maxLen) / 2;
+        return s.Substring(start, maxLen);
+    }
+    }
+
