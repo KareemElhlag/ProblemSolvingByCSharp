@@ -1,0 +1,48 @@
+
+  public int MyAtoi(string s)
+  {
+      List<char> list = new List<char>();
+      long sign = 1;
+      bool digitFound = false;
+      bool signFound = false;
+
+
+      foreach (char c in s)
+      {
+          if (char.IsWhiteSpace(c))
+          {
+              if (digitFound || signFound) break;
+              continue;
+          }
+          else if (c == '-' || c == '+')
+          {
+              if (digitFound || signFound) break;
+              sign = c == '-' ? -1 : 1;
+              signFound = true;
+          }
+          else if (char.IsDigit(c))
+          {
+              list.Add(c);
+              digitFound = true;
+          }
+          else { break; }
+      }
+
+      if (list.Count == 0)
+          return 0;
+
+          string result = new string(list.ToArray());
+          if (long.TryParse(result, out long tempResult))
+          {
+              tempResult *= sign;
+
+              // Clamp to int range
+              if (tempResult > int.MaxValue) return int.MaxValue;
+              if (tempResult < int.MinValue) return int.MinValue;
+
+              return (int)tempResult;
+          }
+          return sign == -1 ? int.MinValue : int.MaxValue;
+
+     
+  }
