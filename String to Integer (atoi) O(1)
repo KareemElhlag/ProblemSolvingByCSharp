@@ -1,0 +1,46 @@
+public class Solution {
+    public int MyAtoi(string s) {
+        if(s==null) return 0;
+        
+        long result = 0;
+        bool isPositive = true;
+
+        int i = 0;
+        while(i<s.Length&&s[i]==' ') i++;
+
+        if(i==s.Length) return 0;
+
+        switch(s[i]){
+            case '+':
+                isPositive = true;
+                i++;
+                break;
+            case '-':
+                isPositive = false;
+                i++;
+                break;
+        }
+
+        if(i==s.Length || s[i]<'0' || s[i]>'9') return 0;
+
+        for(;i<s.Length && s[i]>='0' && s[i]<='9';i++){
+            result = result * 10 + (s[i] - '0');
+
+            if(result-1>int.MaxValue){
+                break;
+            }
+        }
+
+        if(!isPositive){
+            result = - result;
+        }
+
+        if(result<int.MinValue){
+            return int.MinValue;
+        }else if(result>int.MaxValue){
+            return int.MaxValue;
+        }else{
+            return (int)result;
+        }
+    }
+}
